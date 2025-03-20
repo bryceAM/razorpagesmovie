@@ -5,8 +5,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("RazorPagesMovieContext") ?? throw new InvalidOperationException("Connection string 'RazorPagesMovieContext' not found.")));
+}
+else
+{
+    builder.Services.AddDbContext<RazorPagesMovieContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("ProductionMovieContext") ?? throw new InvalidOperationException("Connection string 'ProductionMovieContext' not found.")));
+}
 
 var app = builder.Build();
 
